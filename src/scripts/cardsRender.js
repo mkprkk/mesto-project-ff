@@ -1,7 +1,7 @@
 // Получение шаблона, контейнера и массива карточек
 const cardTemplate = document.querySelector("#card-template").content;
 const cardsContainer = document.querySelector(".places__list");
-let cards = initialCards;
+import {initialCards as cards} from './cards.js';
 
 // Функция удаления карточки
 function deleteCard(element) {
