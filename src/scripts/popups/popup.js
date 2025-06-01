@@ -1,78 +1,6 @@
-import { JakIveCusto } from '../profile.js';
-
-const popups = {
-  'profile__edit-button': 'popup_type_edit',
-  'profile__add-button': 'popup_type_new-card',
-  'card__image': 'popup_type_image'
-};
-
-function addPopupListeners(popupElement) {
-  document.addEventListener('keydown', handleEscape);
-  popupElement.addEventListener('click', handleOverlayClick);
-}
-
-function removePopupListeners(popupElement) {
-  document.removeEventListener('keydown', handleEscape);
-  popupElement.removeEventListener('click', handleOverlayClick);
-  document.removeEventListener('submit', submitForm);
-}
-
-function openPopup(popupElement) {
-  popupElement.classList.add('popup_is-opened');
-  addPopupListeners(popupElement);
-}
-
-function closePopup(popupElement) {
-  popupElement.classList.remove('popup_is-opened');
-  removePopupListeners(popupElement);
-}
-
-function handleEscape(evt) {
-  if (evt.key === 'Escape') {
-    const openedPopup = document.querySelector('.popup_is-opened');
-    if (openedPopup) {
-      closePopup(openedPopup);
-    }
-  }
-}
-
-function handleOverlayClick(evt) {
-  if (evt.target === evt.currentTarget) {
-    closePopup(evt.currentTarget);
-  }
-}
-
-function getPopupElementByKey(popupKey) {
-  const popupClass = popups[popupKey];
-  return document.querySelector(`.${popupClass}`);
-}
-
-function fillProfileForm() {
-  const profileNameForm = document.querySelector('.popup__input_type_name');
-  const profileDescriptionForm = document.querySelector('.popup__input_type_description');
-  profileNameForm.value = JakIveCusto.name;
-  profileDescriptionForm.value = JakIveCusto.description;
-}
-
-function updateProfileFromForm() {
-  const profileNameForm = document.querySelector('.popup__input_type_name');
-  const profileDescriptionForm = document.querySelector('.popup__input_type_description');
-  const profileName = document.querySelector('.profile__title');
-  const profileDescription = document.querySelector('.profile__description');
-  JakIveCusto.name = profileNameForm.value;
-  JakIveCusto.description = profileDescriptionForm.value;
-  profileName.textContent = JakIveCusto.name;
-  profileDescription.textContent = JakIveCusto.description;
-}
-
-function submitForm(evt) {
-  evt.preventDefault();
-  updateProfileFromForm();
-  const openedPopup = document.querySelector('.popup_is-opened');
-  if (openedPopup) {
-    closePopup(openedPopup);
-  }
-}
+import { popups, getPopupElementByKey } from './popupObject.js';
+import { openPopup, closePopup, loadImageInPopup } from './popupCore.js';
+import { submitForm, fillProfileForm } from './popupEditForm.js';
 
 document.addEventListener('click', function(evt) {
   const target = evt.target;
@@ -83,9 +11,7 @@ document.addEventListener('click', function(evt) {
     const popupElement = getPopupElementByKey(popupKey);
     if (popupElement) {
       if (popupKey === 'card__image') {
-        const cardImage = target.closest('.card__image');
-        popupElement.querySelector('.popup__image').src = cardImage.src;
-        popupElement.querySelector('.popup__caption').textContent = cardImage.alt;
+        loadImageInPopup(evt, popupElement);
       } else if (popupKey === 'profile__edit-button') {
         fillProfileForm();
         document.addEventListener('submit', submitForm);
