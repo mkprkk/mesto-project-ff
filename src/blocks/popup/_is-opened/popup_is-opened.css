@@ -5,3 +5,7 @@
   pointer-events: all;
   transition: visibility 0s, opacity 0.6s;
 }
+
+body:has(.popup_is-opened) {
+  overflow: hidden;
+}
