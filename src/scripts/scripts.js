@@ -1,3 +1,2 @@
-import './profile.js';
-import './popups/popup.js';
-import './cards/cardsRender.js';
+import "./popups/popupCore.js";
+import "./card.js";
