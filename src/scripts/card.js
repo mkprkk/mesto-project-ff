@@ -1,19 +1,16 @@
-// Получение шаблона, контейнера и массива карточек
 const cardTemplate = document.querySelector("#card-template").content;
-const cardsContainer = document.querySelector(".places__list");
-let cards = initialCards;
 
 // Функция удаления карточки
-function deleteCard(element) {
+export function deleteCard(element) {
   element.remove();
 }
 
 // Функция создания карточки
-function createCard(cardData, delHandler) {
+export function createCard(cardData, handleLike, delHandler, loadHandler) {
   const cardElement = cardTemplate
     .querySelector(".places__item")
     .cloneNode(true);
-  
+
   cardElement.querySelector(".card__image").src = cardData.link;
   cardElement.querySelector(".card__image").alt = cardData.name;
   cardElement.querySelector(".card__title").textContent = cardData.name;
@@ -21,16 +18,17 @@ function createCard(cardData, delHandler) {
   const deleteButton = cardElement.querySelector(".card__delete-button");
   deleteButton.addEventListener("click", () => delHandler(cardElement));
 
+  const likeButton = cardElement.querySelector(".card__like-button");
+  likeButton.addEventListener("click", () => handleLike(likeButton));
+
+  const cardImage = cardElement.querySelector(".card__image");
+  cardImage.addEventListener("click", () => loadHandler(cardImage));
+
   return cardElement;
 }
 
-// Функция рендеринга карточек
-function renderCards(createHandler, delHandler) {
-  cards.forEach((cardData) => {
-    const renderedCard = createHandler(cardData, delHandler);
-    cardsContainer.append(renderedCard);
-  });
+// Функция переключения состояния лайка
+export function toggleIsLiked(heart) {
+  heart.classList.toggle("card__like-button_is-active");
 }
 
-// Вызов рендеринга карточек
-renderCards(createCard, deleteCard);
