@@ -1,11 +1,9 @@
-import { initialCards as cards } from "../../database/cards.js";
 import { openPopup, closePopup } from "../popupCore.js";
+import { loadImageInPopup, cardsContainer } from "../../scripts.js";
 import {
   createCard,
   deleteCard,
   toggleIsLiked,
-  cardsContainer,
-  loadImageInPopup,
 } from "../../card.js";
 
 const cardTitle = document.querySelector(".popup__input_type_card-name");
@@ -17,7 +15,6 @@ function addCardFromForm(evt) {
     name: cardTitle.value,
     link: cardLink.value,
   };
-  cards.push(cardData);
 
   const newCard = createCard(
     cardData,
@@ -27,18 +24,14 @@ function addCardFromForm(evt) {
   );
   cardsContainer.prepend(newCard);
 
+  document.removeEventListener("submit", addCardFromForm);
   const openedPopup = document.querySelector(".popup_is-opened");
   closePopup(openedPopup);
-  document.removeEventListener("submit", addCardFromForm);
-  cardTitle.value = "";
-  cardLink.value = "";
+
+  evt.target.reset();
 }
 
 export function initAddPopup() {
   document.addEventListener("submit", addCardFromForm);
   openPopup(document.querySelector(".popup_type_new-card"));
-}
-
-export function removeSubmitAddListener() {
-  document.removeEventListener("submit", addCardFromForm);
 }

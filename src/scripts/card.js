@@ -1,8 +1,4 @@
-// Получение шаблона, контейнера и массива карточек
 const cardTemplate = document.querySelector("#card-template").content;
-export const cardsContainer = document.querySelector(".places__list");
-import { initialCards as cards } from "./database/cards.js";
-import { openPopup } from "./popups/popupCore.js";
 
 // Функция удаления карточки
 export function deleteCard(element) {
@@ -36,24 +32,4 @@ export function toggleIsLiked(heart) {
   heart.classList.toggle("card__like-button_is-active");
 }
 
-export function loadImageInPopup(imageElement) {
-  document.querySelector(".popup__image").src = imageElement.src;
-  document.querySelector(".popup__caption").textContent = imageElement.alt;
-  openPopup(document.querySelector(".popup_type_image"));
-}
 
-// Функция рендеринга карточек
-function renderCards(createHandler, delHandler, likeHandler, loadHandler) {
-  cards.forEach((cardData) => {
-    const renderedCard = createHandler(
-      cardData,
-      likeHandler,
-      delHandler,
-      loadHandler
-    );
-    cardsContainer.append(renderedCard);
-  });
-}
-
-// Вызов рендеринга карточек
-renderCards(createCard, deleteCard, toggleIsLiked, loadImageInPopup);

@@ -28,10 +28,10 @@ function updateProfileFromForm() {
 function submitForm(evt) {
   evt.preventDefault();
   updateProfileFromForm();
+  document.removeEventListener("submit", submitForm);
   const openedPopup = document.querySelector(".popup_is-opened");
   if (openedPopup) {
     closePopup(openedPopup);
-    document.removeEventListener("submit", submitForm);
   }
 }
 
@@ -39,8 +39,4 @@ export function initEditPopup() {
   fillProfileForm();
   document.addEventListener("submit", submitForm);
   openPopup(document.querySelector(".popup_type_edit"));
-}
-
-export function removeSubmitEditListener() {
-  document.removeEventListener("submit", submitForm);
 }
