@@ -1,15 +1,15 @@
 // Получение шаблона, контейнера и массива карточек
 const cardTemplate = document.querySelector("#card-template").content;
-const cardsContainer = document.querySelector(".places__list");
+export const cardsContainer = document.querySelector(".places__list");
 import {initialCards as cards} from './cards.js';
 
 // Функция удаления карточки
-function deleteCard(element) {
+export function deleteCard(element) {
   element.remove();
 }
 
 // Функция создания карточки
-function createCard(cardData, delHandler) {
+export function createCard(cardData) {
   const cardElement = cardTemplate
     .querySelector(".places__item")
     .cloneNode(true);
@@ -19,7 +19,7 @@ function createCard(cardData, delHandler) {
   cardElement.querySelector(".card__title").textContent = cardData.name;
 
   const deleteButton = cardElement.querySelector(".card__delete-button");
-  deleteButton.addEventListener("click", () => delHandler(cardElement));
+  deleteButton.addEventListener("click", () => deleteCard(cardElement));
 
   return cardElement;
 }
@@ -33,4 +33,4 @@ function renderCards(createHandler, delHandler) {
 }
 
 // Вызов рендеринга карточек
-renderCards(createCard, deleteCard);
+renderCards(createCard, deleteCard, cards);

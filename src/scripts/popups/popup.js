@@ -1,6 +1,7 @@
 import { popups, getPopupElementByKey } from './popupObject.js';
 import { openPopup, closePopup, loadImageInPopup } from './popupCore.js';
-import { submitForm, fillProfileForm } from './popupEditForm.js';
+import { submitForm, fillProfileForm } from './forms/popupEditForm.js';
+import { addCardFromForm } from './forms/popupAddForm.js';
 
 document.addEventListener('click', function(evt) {
   const target = evt.target;
@@ -13,8 +14,10 @@ document.addEventListener('click', function(evt) {
       if (popupKey === 'card__image') {
         loadImageInPopup(evt, popupElement);
       } else if (popupKey === 'profile__edit-button') {
-        fillProfileForm();
-        document.addEventListener('submit', submitForm);
+          fillProfileForm();
+          document.addEventListener('submit', submitForm);
+      } else if (popupKey === 'profile__add-button') {
+          document.addEventListener('submit', addCardFromForm);
       }
       openPopup(popupElement);
     }
