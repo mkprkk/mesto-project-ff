@@ -1,5 +1,5 @@
-import { initEditPopup } from "./buttonHandlers/popupEditButton.js";
-import { initAddPopup } from "./buttonHandlers/popupAddButton.js";
+import { initEditPopup, removeSubmitEditListener } from "./buttonHandlers/popupEditButton.js";
+import { initAddPopup, removeSubmitAddListener } from "./buttonHandlers/popupAddButton.js";
 
 // Так как обработчик попапа на картинке вешается при создании - делать ему здесь нечего
 export const popupButtons = {
@@ -14,6 +14,7 @@ export function openPopup(popupElement) {
   document.addEventListener("keydown", handleEscape);
   popupElement.addEventListener("click", handleOverlayClick);
   popupElement.addEventListener("click", handleCrossClick);
+  document.removeEventListener("click", popupManager);
 }
 
 export function closePopup(popupElement) {
@@ -21,6 +22,10 @@ export function closePopup(popupElement) {
   document.removeEventListener("keydown", handleEscape);
   popupElement.removeEventListener("click", handleOverlayClick);
   popupElement.removeEventListener("click", handleCrossClick);
+  document.addEventListener("click", popupManager);
+
+  removeSubmitAddListener?.();
+  removeSubmitEditListener?.();
 }
 
 function handleEscape(evt) {

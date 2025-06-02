@@ -40,3 +40,7 @@ export function initEditPopup() {
   document.addEventListener("submit", submitForm);
   openPopup(document.querySelector(".popup_type_edit"));
 }
+
+export function removeSubmitEditListener() {
+  document.removeEventListener("submit", submitForm);
+}

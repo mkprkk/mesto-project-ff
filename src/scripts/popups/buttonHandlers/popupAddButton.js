@@ -38,3 +38,7 @@ export function initAddPopup() {
   document.addEventListener("submit", addCardFromForm);
   openPopup(document.querySelector(".popup_type_new-card"));
 }
+
+export function removeSubmitAddListener() {
+  document.removeEventListener("submit", addCardFromForm);
+}
