@@ -15,10 +15,7 @@ function popupManager(evt) {
     popupKey?.();
   }
 
-
 // --------------------------------------------------------------------
-
-
 
 import {createCard, deleteCard, toggleIsLiked } from "./card.js";
 
@@ -48,3 +45,9 @@ function renderCards(createHandler, delHandler, likeHandler, loadHandler) {
 
 // Вызов рендеринга карточек
 renderCards(createCard, deleteCard, toggleIsLiked, loadImageInPopup);
+
+// --------------------------------------------------------------------
+
+import { enableValidation } from "./validation/validation.js";
+
+enableValidation();

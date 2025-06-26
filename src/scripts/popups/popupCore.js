@@ -1,4 +1,17 @@
+import { checkInputValidity, toggleButtonState } from "../validation/validation.js";
+
 export function openPopup(popupElement) {
+  const popupInputs = Array.from(
+    popupElement.querySelectorAll(".popup__input")
+  );
+  const popupForm = popupElement.querySelector(".popup__form");
+  popupInputs.forEach((inputElement) => {
+    checkInputValidity(popupForm, inputElement);
+  });
+
+  const buttonElement = popupForm.querySelector(".popup__button");
+  toggleButtonState(popupInputs, buttonElement);
+
   popupElement.classList.add("popup_is-opened");
   document.addEventListener("keydown", handleEscape);
   popupElement.addEventListener("click", handleOverlayClick);
@@ -18,8 +31,10 @@ function handleEscape(evt) {
 }
 
 function handleOverlayClick(evt) {
-  if (evt.target === evt.currentTarget || evt.target.classList.contains("popup__close")) {
+  if (
+    evt.target === evt.currentTarget ||
+    evt.target.classList.contains("popup__close")
+  ) {
     closePopup(evt.currentTarget);
   }
 }
-
