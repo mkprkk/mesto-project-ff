@@ -1,4 +1,4 @@
-.popup__input:not(:focus):invalid {
+.popup__input-invalid {
     border-bottom: 1px solid red;
 }
 

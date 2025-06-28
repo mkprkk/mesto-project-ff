@@ -50,6 +50,7 @@
               maxlength="40"
               pattern="^[A-Za-zА-Яа-яёЁ\-\s]+$"
               required
+              data-error-message="Поле может содержать только латинские и кириллические буквы, знаки дефиса и пробелы."
             />
             <span class="popup__input-error-message name-error-message"></span>
             <input
@@ -62,8 +63,11 @@
               maxlength="200"
               pattern="^[A-Za-zА-Яа-яёЁ\-\s]+$"
               required
+              data-error-message="Поле может содержать только латинские и кириллические буквы, знаки дефиса и пробелы."
             />
-            <span class="popup__input-error-message description-error-message"></span>
+            <span
+              class="popup__input-error-message description-error-message"
+            ></span>
             <button type="submit" class="button popup__button">
               Сохранить
             </button>
@@ -78,17 +82,25 @@
             <input
               type="text"
               name="place-name"
+              id="place-name"
               class="popup__input popup__input_type_card-name"
               placeholder="Название"
               required
+              minlength="2"
+              maxlength="30"
+              pattern="^[A-Za-zА-Яа-яёЁ\-\s]+$"
+              data-error-message="Поле может содержать только латинские и кириллические буквы, знаки дефиса и пробелы."
             />
+            <span class="popup__input-error-message place-name-error-message"></span>
             <input
               type="url"
               name="link"
+              id="link"
               class="popup__input popup__input_type_url"
               placeholder="Ссылка на картинку"
               required
             />
+            <span class="popup__input-error-message link-error-message"></span>
             <button type="submit" class="button popup__button">
               Сохранить
             </button>

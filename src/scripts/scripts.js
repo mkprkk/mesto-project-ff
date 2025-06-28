@@ -49,5 +49,7 @@ renderCards(createCard, deleteCard, toggleIsLiked, loadImageInPopup);
 // --------------------------------------------------------------------
 
 import { enableValidation } from "./validation/validation.js";
+import { validationSettings } from "./validation/validationSettings.js";
 
-enableValidation();
+enableValidation(validationSettings);
+

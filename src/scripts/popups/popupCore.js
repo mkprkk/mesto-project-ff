@@ -1,16 +1,11 @@
-import { checkInputValidity, toggleButtonState } from "../validation/validation.js";
+import {
+  clearValidation,
+} from "../validation/validation.js";
+import { validationSettings } from "../validation/validationSettings.js";
 
 export function openPopup(popupElement) {
-  const popupInputs = Array.from(
-    popupElement.querySelectorAll(".popup__input")
-  );
-  const popupForm = popupElement.querySelector(".popup__form");
-  popupInputs.forEach((inputElement) => {
-    checkInputValidity(popupForm, inputElement);
-  });
-
-  const buttonElement = popupForm.querySelector(".popup__button");
-  toggleButtonState(popupInputs, buttonElement);
+  const formElement = popupElement.querySelector(`.${validationSettings.formSelector}`);
+  clearValidation(formElement, validationSettings);
 
   popupElement.classList.add("popup_is-opened");
   document.addEventListener("keydown", handleEscape);
