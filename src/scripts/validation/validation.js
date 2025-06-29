@@ -74,6 +74,7 @@ export const enableValidation = (settings) => {
 };
 
 export const clearValidation = (formElement, settings) => {
+  if (!formElement) return; 
   const inputList = Array.from(formElement.querySelectorAll(`.${settings.inputSelector}`));
   const buttonElement = formElement.querySelector(`.${settings.submitButtonSelector}`);
 

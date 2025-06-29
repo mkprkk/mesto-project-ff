@@ -1,10 +1,13 @@
 import "./popups/popupCore.js";
 import { initEditPopup } from "./popups/buttonHandlers/popupEditButton.js";
 import { initAddPopup } from "./popups/buttonHandlers/popupAddButton.js";
+import { initEditProfileImagePopup } from "./popups/buttonHandlers/popupEditProfileImage.js";
+
 
 const popupButtons = {
   "profile__edit-button": initEditPopup,
   "profile__add-button": initAddPopup,
+  "profile__image": initEditProfileImagePopup,
 };
 
 document.addEventListener("click", popupManager);
@@ -12,17 +15,17 @@ document.addEventListener("click", popupManager);
 function popupManager(evt) {
   const target = evt.target;
   const popupKey = popupButtons[target.className];
-    popupKey?.();
-  }
+  popupKey?.();
+}
 
 // --------------------------------------------------------------------
 
-import {createCard, deleteCard, toggleIsLiked } from "./card.js";
+import { createCard, deleteCard, toggleIsLiked, setLikeCount } from "./card.js";
+import { openPopup } from "./popups/popupCore.js";
+import { getCards } from "./requests.js";
 
 // Получение шаблона, контейнера и массива карточек
 export const cardsContainer = document.querySelector(".places__list");
-import { initialCards as cards } from "./database/cards.js";
-import { openPopup } from "./popups/popupCore.js";
 
 export function loadImageInPopup(imageElement) {
   document.querySelector(".popup__image").src = imageElement.src;
@@ -31,7 +34,15 @@ export function loadImageInPopup(imageElement) {
 }
 
 // Функция рендеринга карточек
-function renderCards(createHandler, delHandler, likeHandler, loadHandler) {
+async function renderCards(
+  createHandler,
+  delHandler,
+  likeHandler,
+  loadHandler,
+  setLikeCount
+) {
+  const profileData = await getProfileData();
+  const cards = await getCards();
   cards.forEach((cardData) => {
     const renderedCard = createHandler(
       cardData,
@@ -39,12 +50,29 @@ function renderCards(createHandler, delHandler, likeHandler, loadHandler) {
       delHandler,
       loadHandler
     );
+    if (cardData.ownerId !== profileData._id) {
+      renderedCard.querySelector(".card__delete-button").remove();
+    }
+    setLikeCount(
+      renderedCard.querySelector(".card__like-button"),
+      cardData.likes.length
+    );
+    const selfLiked = cardData.likes.some((like) => like._id === profileData._id);
+    if (selfLiked) {
+      renderedCard.querySelector(".card__like-button").classList.add("card__like-button_is-active");
+    }
     cardsContainer.append(renderedCard);
   });
 }
 
 // Вызов рендеринга карточек
-renderCards(createCard, deleteCard, toggleIsLiked, loadImageInPopup);
+renderCards(
+  createCard,
+  deleteCard,
+  toggleIsLiked,
+  loadImageInPopup,
+  setLikeCount
+);
 
 // --------------------------------------------------------------------
 
@@ -53,3 +81,9 @@ import { validationSettings } from "./validation/validationSettings.js";
 
 enableValidation(validationSettings);
 
+// --------------------------------------------------------------------
+import { getProfileData } from "./requests.js";
+
+getProfileData();
+
+// --------------------------------------------------------------------

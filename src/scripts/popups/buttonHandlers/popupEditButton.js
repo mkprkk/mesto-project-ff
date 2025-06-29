@@ -1,5 +1,9 @@
-import { JakIveCusto } from "../../database/profile.js";
-import { openPopup, closePopup } from "../popupCore.js";
+import { openPopup, submitFormWrapper } from "../popupCore.js";
+import { postProfileData } from "../../requests.js";
+
+const profileName = document.querySelector(".profile__title");
+const profileDescription = document.querySelector(".profile__description");
+const popupEdit = document.querySelector(".popup_type_edit");
 
 function fillProfileForm() {
   const profileNameForm = document.querySelector(".popup__input_type_name");
@@ -7,36 +11,20 @@ function fillProfileForm() {
     ".popup__input_type_description"
   );
 
-  profileNameForm.value = JakIveCusto.name;
-  profileDescriptionForm.value = JakIveCusto.description;
+  profileNameForm.value = profileName.textContent;
+  profileDescriptionForm.value = profileDescription.textContent;
 }
 
-function updateProfileFromForm() {
+async function updateProfileFromForm() {
   const profileNameForm = document.querySelector(".popup__input_type_name");
   const profileDescriptionForm = document.querySelector(
     ".popup__input_type_description"
   );
-  const profileName = document.querySelector(".profile__title");
-  const profileDescription = document.querySelector(".profile__description");
-
-  JakIveCusto.name = profileNameForm.value;
-  JakIveCusto.description = profileDescriptionForm.value;
-  profileName.textContent = JakIveCusto.name;
-  profileDescription.textContent = JakIveCusto.description;
-}
-
-function submitForm(evt) {
-  evt.preventDefault();
-  updateProfileFromForm();
-  document.removeEventListener("submit", submitForm);
-  const openedPopup = document.querySelector(".popup_is-opened");
-  if (openedPopup) {
-    closePopup(openedPopup);
-  }
+  await postProfileData(profileNameForm.value, profileDescriptionForm.value);
 }
 
 export function initEditPopup() {
   fillProfileForm();
-  document.addEventListener("submit", submitForm);
-  openPopup(document.querySelector(".popup_type_edit"));
+  document.addEventListener("submit", (evt) => submitFormWrapper(evt, updateProfileFromForm, false));
+  openPopup(popupEdit);
 }

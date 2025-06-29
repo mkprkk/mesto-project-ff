@@ -1,37 +1,34 @@
-import { openPopup, closePopup } from "../popupCore.js";
+import { openPopup, submitFormWrapper } from "../popupCore.js";
 import { loadImageInPopup, cardsContainer } from "../../scripts.js";
-import {
-  createCard,
-  deleteCard,
-  toggleIsLiked,
-} from "../../card.js";
+import { createCard, deleteCard, toggleIsLiked } from "../../card.js";
+import { postCardData } from "../../requests.js";
 
 const cardTitle = document.querySelector(".popup__input_type_card-name");
 const cardLink = document.querySelector(".popup__input_type_url");
+const popupAddCard = document.querySelector(".popup_type_new-card");
 
-function addCardFromForm(evt) {
-  evt.preventDefault();
+async function addCardFromForm() {
   const cardData = {
     name: cardTitle.value,
     link: cardLink.value,
   };
 
-  const newCard = createCard(
-    cardData,
-    toggleIsLiked,
-    deleteCard,
-    loadImageInPopup
-  );
-  cardsContainer.prepend(newCard);
-
-  document.removeEventListener("submit", addCardFromForm);
-  const openedPopup = document.querySelector(".popup_is-opened");
-  closePopup(openedPopup);
-
-  evt.target.reset();
+  await postCardData(cardData)
+    .then((newCardData) => {
+      const newCard = createCard(
+        newCardData,
+        toggleIsLiked,
+        deleteCard,
+        loadImageInPopup
+      );
+      cardsContainer.prepend(newCard);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
 }
 
 export function initAddPopup() {
-  document.addEventListener("submit", addCardFromForm);
-  openPopup(document.querySelector(".popup_type_new-card"));
+  document.addEventListener("submit", (evt) => submitFormWrapper(evt, addCardFromForm));
+  openPopup(popupAddCard);
 }
