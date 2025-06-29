@@ -136,7 +136,7 @@ export const toggleLike = async (cardId, isLiked) => {
         if (!res.ok) {
             throw new Error(`Ошибка: ${res.status}`);
         }
-        console.log(res);
+        (res);
         return res.json();
     }).catch((err) => {
         console.error(err);

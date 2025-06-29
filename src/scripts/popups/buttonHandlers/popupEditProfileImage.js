@@ -16,7 +16,6 @@ async function updateImageFromForm() {
     .then((data) => {
       const profileImage = document.querySelector(".profile__image");
       profileImage.style.backgroundImage = `url(${data.avatar})`;
-      console.log("Profile image updated successfully:", data);
     })
     .catch((err) => {
       console.error(err);
