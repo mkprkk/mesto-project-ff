@@ -20,9 +20,10 @@ function popupManager(evt) {
 
 // --------------------------------------------------------------------
 
-import { createCard, deleteCard, toggleIsLiked, setLikeCount } from "./card.js";
+import { createCard, toggleIsLiked, setLikeCount } from "./card.js";
 import { openPopup } from "./popups/popupCore.js";
-import { getCards } from "./requests.js";
+import { getCards } from "./api.js";
+import { initDeleteConfirmPopup } from "./popups/buttonHandlers/DeleteConfirmPopup.js";
 
 // Получение шаблона, контейнера и массива карточек
 export const cardsContainer = document.querySelector(".places__list");
@@ -68,7 +69,7 @@ async function renderCards(
 // Вызов рендеринга карточек
 renderCards(
   createCard,
-  deleteCard,
+  initDeleteConfirmPopup,
   toggleIsLiked,
   loadImageInPopup,
   setLikeCount
@@ -82,7 +83,7 @@ import { validationSettings } from "./validation/validationSettings.js";
 enableValidation(validationSettings);
 
 // --------------------------------------------------------------------
-import { getProfileData } from "./requests.js";
+import { getProfileData } from "./api.js";
 
 getProfileData();
 

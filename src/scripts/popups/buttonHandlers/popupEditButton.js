@@ -1,5 +1,5 @@
 import { openPopup, submitFormWrapper } from "../popupCore.js";
-import { postProfileData } from "../../requests.js";
+import { postProfileData } from "../../api.js";
 
 const profileName = document.querySelector(".profile__title");
 const profileDescription = document.querySelector(".profile__description");
@@ -25,6 +25,6 @@ async function updateProfileFromForm() {
 
 export function initEditPopup() {
   fillProfileForm();
-  document.addEventListener("submit", (evt) => submitFormWrapper(evt, updateProfileFromForm, false));
+  document.addEventListener("submit", async (evt) => await submitFormWrapper(evt, updateProfileFromForm, false), { once: true });
   openPopup(popupEdit);
 }

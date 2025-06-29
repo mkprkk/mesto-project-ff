@@ -2,13 +2,18 @@ const name = document.querySelector(".profile__title");
 const description = document.querySelector(".profile__description");
 const avatar = document.querySelector(".profile__image");
 
-const cohortId = "wff-cohort-41";
-const myId = "7b863707-9e6a-4a46-bfb7-d7be14aaff4b";
+const config = {
+  baseUrl: 'https://nomoreparties.co/v1/wff-cohort-41',
+  headers: {
+    authorization: '7b863707-9e6a-4a46-bfb7-d7be14aaff4b',
+    'Content-Type': 'application/json'
+  }
+}
 
-export async function getProfileData() {
-  return fetch(`https://nomoreparties.co/v1/${cohortId}/users/me`, {
+export const getProfileData = async () => {
+  return fetch(`${config.baseUrl}/users/me`, {
     headers: {
-      authorization: myId,
+      authorization: config.headers.authorization,
     },
   })
     .then((res) => {
@@ -28,10 +33,10 @@ export async function getProfileData() {
     });
 }
 
-export function getCards() {
-  return fetch(`https://nomoreparties.co/v1/${cohortId}/cards`, {
+export const getCards = async () => {
+  return fetch(`${config.baseUrl}/cards`, {
     headers: {
-      authorization: myId,
+      authorization: config.headers.authorization,
     },
   })
     .then((res) => {
@@ -58,12 +63,12 @@ export function getCards() {
     });
 }
 
-export async function postProfileData(nameValue, descriptionValue) {
-  return fetch(`https://nomoreparties.co/v1/${cohortId}/users/me`, {
+export const postProfileData = async (nameValue, descriptionValue) => {
+  return fetch(`${config.baseUrl}/users/me`, {
     method: "PATCH",
     headers: {
-      "Content-Type": "application/json",
-      authorization: myId,
+      "Content-Type": config.headers["Content-Type"],
+      authorization: config.headers.authorization,
     },
     body: JSON.stringify({
       name: nameValue,
@@ -85,12 +90,12 @@ export async function postProfileData(nameValue, descriptionValue) {
     });
 }
 
-export async function postCardData(cardData) {
-  return fetch(`https://nomoreparties.co/v1/${cohortId}/cards`, {
+export const postCardData = async (cardData) => {
+  return fetch(`${config.baseUrl}/cards`, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
-      authorization: myId,
+      "Content-Type": config.headers["Content-Type"],
+      authorization: config.headers.authorization,
     },
     body: JSON.stringify(cardData),
   })
@@ -105,11 +110,11 @@ export async function postCardData(cardData) {
     });
 }
 
-export async function deleteCardData(cardId) {
-    return fetch(`https://nomoreparties.co/v1/${cohortId}/cards/${cardId}`, {
+export const deleteCardData = async (cardId) => {
+    return fetch(`${config.baseUrl}/cards/${cardId}`, {
         method: "DELETE",
         headers: {
-            authorization: myId,
+            authorization: config.headers.authorization,
         },
     }).then((res) => {
         if (!res.ok) {
@@ -121,11 +126,11 @@ export async function deleteCardData(cardId) {
     });
 }
 
-export async function toggleLike(cardId, isLiked) {
-    return fetch(`https://nomoreparties.co/v1/${cohortId}/cards/likes/${cardId}`, {
+export const toggleLike = async (cardId, isLiked) => {
+    return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
         method: isLiked ? "DELETE" : "PUT",
         headers: {
-            authorization: myId,
+            authorization: config.headers.authorization,
         },
     }).then((res) => {
         if (!res.ok) {
@@ -138,12 +143,12 @@ export async function toggleLike(cardId, isLiked) {
     });
 }
 
-export async function postAvatarData(avatarUrl) {
-    return fetch(`https://nomoreparties.co/v1/${cohortId}/users/me/avatar`, {
+export const postAvatarData = async (avatarUrl) => {
+    return fetch(`${config.baseUrl}/users/me/avatar`, {
         method: "PATCH",
         headers: {
-            "Content-Type": "application/json",
-            authorization: myId,
+            "Content-Type": config.headers["Content-Type"],
+            authorization: config.headers.authorization,
         },
         body: JSON.stringify({
             avatar: avatarUrl,

@@ -9,10 +9,15 @@ export function openPopup(popupElement) {
 
   const submitButton = popupElement.querySelector(".popup__button");
 
-  if (!submitButton.dataset.initialText) {
-    submitButton.dataset.initialText = submitButton.textContent;
-  } else {
-    submitButton.textContent = submitButton.dataset.initialText;
+  if (submitButton) {
+    const initialText = submitButton.textContent.trim();
+    if (initialText) {
+      if (!submitButton.dataset.initialText) {
+        submitButton.dataset.initialText = initialText;
+      } else {
+        submitButton.textContent = submitButton.dataset.initialText;
+      }
+    }
   }
 
   popupElement.classList.add("popup_is-opened");
@@ -61,8 +66,8 @@ export async function submitForm(callback, evt) {
   );
 }
 
-export function submitFormWrapper(evt, callback, reset = true) {
-  submitForm(callback, evt);
+export async function submitFormWrapper(evt, callback, reset = true) {
+  await submitForm(callback, evt);
   if (reset) {
     evt.target.reset();
   }

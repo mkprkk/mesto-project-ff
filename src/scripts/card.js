@@ -1,9 +1,9 @@
-import { deleteCardData, toggleLike } from "./requests.js";
+import { deleteCardData, toggleLike } from "./api.js";
 
 const cardTemplate = document.querySelector("#card-template").content;
 
 // Функция удаления карточки
-export async function deleteCard(element) {
+export async function deleteCard(element) { 
   await deleteCardData(element.id);
   element.remove();
 }

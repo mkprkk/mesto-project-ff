@@ -1,7 +1,7 @@
 import { openPopup, submitFormWrapper } from "../popupCore.js";
 import { loadImageInPopup, cardsContainer } from "../../scripts.js";
 import { createCard, deleteCard, toggleIsLiked } from "../../card.js";
-import { postCardData } from "../../requests.js";
+import { postCardData } from "../../api.js";
 
 const cardTitle = document.querySelector(".popup__input_type_card-name");
 const cardLink = document.querySelector(".popup__input_type_url");
@@ -21,7 +21,7 @@ async function addCardFromForm() {
         deleteCard,
         loadImageInPopup
       );
-      cardsContainer.prepend(newCard);
+      location.reload();
     })
     .catch((err) => {
       console.error(err);
@@ -29,6 +29,6 @@ async function addCardFromForm() {
 }
 
 export function initAddPopup() {
-  document.addEventListener("submit", (evt) => submitFormWrapper(evt, addCardFromForm));
+  document.addEventListener("submit", async (evt) => await submitFormWrapper(evt, addCardFromForm), { once: true });
   openPopup(popupAddCard);
 }
