@@ -1,2 +1,2 @@
 # Проектная работа Mesto
-https://github.com/mkprkk/mesto-project-ff
+https://mkprkk.github.io/mesto-project-ff/

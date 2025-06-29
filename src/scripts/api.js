@@ -1,7 +1,3 @@
-const name = document.querySelector(".profile__title");
-const description = document.querySelector(".profile__description");
-const avatar = document.querySelector(".profile__image");
-
 const config = {
   baseUrl: 'https://nomoreparties.co/v1/wff-cohort-41',
   headers: {
@@ -23,9 +19,6 @@ export const getProfileData = async () => {
       return res.json();
     })
     .then((result) => {
-      name.textContent = result.name;
-      description.textContent = result.about;
-      avatar.style.backgroundImage = `url(${result.avatar})`;
       return result;
     })
     .catch((err) => {
@@ -82,8 +75,7 @@ export const postProfileData = async (nameValue, descriptionValue) => {
       return res.json();
     })
     .then((result) => {
-      name.textContent = result.name;
-      description.textContent = result.about;
+      return result;
     })
     .catch((err) => {
       console.error(err);

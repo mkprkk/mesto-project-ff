@@ -6,14 +6,14 @@ const showInputError = (formElement, inputElement, errorMessage, settings) => {
   inputElement.classList.add(settings.inputErrorClass);
 };
 
-export const hideInputError = (formElement, inputElement, settings) => {
+const hideInputError = (formElement, inputElement, settings) => {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error-message`);
   errorElement.classList.remove(settings.errorClass);
   errorElement.textContent = "";
   inputElement.classList.remove(settings.inputErrorClass);
 };
 
-export const checkInputValidity = (formElement, inputElement, settings) => {
+const checkInputValidity = (formElement, inputElement, settings) => {
   inputElement.setCustomValidity("");
 
   if (!inputElement.validity.valid) {
@@ -41,7 +41,7 @@ const hasInvalidInput = (inputList) => {
   return inputList.some((inputElement) => !inputElement.validity.valid);
 };
 
-export const toggleButtonState = (inputList, buttonElement, settings) => {
+const toggleButtonState = (inputList, buttonElement, settings) => {
   if (hasInvalidInput(inputList)) {
     buttonElement.disabled = true;
     buttonElement.classList.add(settings.inactiveButtonClass);

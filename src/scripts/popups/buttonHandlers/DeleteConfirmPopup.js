@@ -1,5 +1,6 @@
 import { deleteCard } from "../../card.js";
-import { openPopup, submitFormWrapper } from "../popupCore.js";
+import { openPopup } from "../popupCore.js";
+import { submitFormWrapper } from "../../scripts.js";
 
 export function initDeleteConfirmPopup(element) {
   const deleteConfirmPopup = document.querySelector(".popup_type_delete-card");

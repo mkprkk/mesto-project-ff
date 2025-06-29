@@ -1,5 +1,5 @@
-import { openPopup, submitFormWrapper } from "../popupCore.js";
-import { loadImageInPopup, cardsContainer } from "../../scripts.js";
+import { openPopup } from "../popupCore.js";
+import { loadImageInPopup, submitFormWrapper } from "../../scripts.js";
 import { createCard, deleteCard, toggleIsLiked } from "../../card.js";
 import { postCardData } from "../../api.js";
 
