@@ -1,0 +1,16 @@
+.popup__input-invalid {
+    border-bottom: 1px solid red;
+}
+
+.on-error-message {
+    color: red;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.button_inactive {
+    border: 1px solid #C4C4C4;
+    color: #C4C4C4;
+    background-color: white;
+    pointer-events: none;
+}
