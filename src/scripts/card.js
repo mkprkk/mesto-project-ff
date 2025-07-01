@@ -3,9 +3,13 @@ import { deleteCardData, toggleLike } from "./api.js";
 const cardTemplate = document.querySelector("#card-template").content;
 
 // Функция удаления карточки
-export async function deleteCard(element) { 
-  await deleteCardData(element.id);
-  element.remove();
+export async function deleteCard(element) {
+  try {
+    await deleteCardData(element.id);
+    element.remove();
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 // Функция создания карточки
@@ -36,11 +40,14 @@ export async function toggleIsLiked(heart) {
   const parentItem = heart.closest(".places__item");
   const heartButton = parentItem.querySelector(".card__like-button");
   const isLiked = heart.classList.contains("card__like-button_is-active");
-  const response = await toggleLike(parentItem.id, isLiked);
-  heart.classList.toggle("card__like-button_is-active");
-  setLikeCount(heartButton, response.likes.length);
+  try {
+    const response = await toggleLike(parentItem.id, isLiked);
+    heart.classList.toggle("card__like-button_is-active");
+    setLikeCount(heartButton, response.likes.length);
+  } catch (err) {
+    console.error(err);
+  }
 }
-
 export function setLikeCount(heart, count) {
   heart.style.setProperty("--like-count", `"${count}"`);
 }
