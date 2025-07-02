@@ -46,7 +46,7 @@ const config = {
     cardLikeButton: ".card__like-button",
     popupIsOpened: ".popup_is-opened",
     popupButton: ".popup__button",
-    cardLikeButtonIsActive: ".card__like-button_is-active",
+    cardLikeButtonIsActive: "card__like-button_is-active",
   },
   popupButtons: {
     edit: "profile__edit-button",
@@ -90,16 +90,10 @@ document.addEventListener("click", popupManager);
 
 // ======================= Работа с формами =======================
 async function updateImageFromForm() {
-  await postAvatarData(profileImageInput.value)
-    .then((data) => {
-      const profileImage = document.querySelector(
-        config.selectors.profileImage
-      );
-      profileImage.style.backgroundImage = `url(${data.avatar})`;
-    })
-    .catch((err) => {
-      console.error(err);
-    });
+  await postAvatarData(profileImageInput.value).then((data) => {
+    const profileImage = document.querySelector(config.selectors.profileImage);
+    profileImage.style.backgroundImage = `url(${data.avatar})`;
+  });
 }
 
 async function submitForm(callback, evt) {
@@ -136,25 +130,21 @@ async function addCardFromForm() {
     link: cardLink.value,
   };
 
-  await postCardData(cardData)
-    .then((newCardData) => {
-      createCard(
-        newCardData,
-        toggleIsLiked,
-        initDeleteConfirmPopup,
-        loadImageInPopup
-      );
-      renderCards(
-        createCard,
-        initDeleteConfirmPopup,
-        toggleIsLiked,
-        loadImageInPopup,
-        setLikeCount
-      );
-    })
-    .catch((err) => {
-      console.error(err);
-    });
+  await postCardData(cardData).then((newCardData) => {
+    createCard(
+      newCardData,
+      toggleIsLiked,
+      initDeleteConfirmPopup,
+      loadImageInPopup
+    );
+    renderCards(
+      createCard,
+      initDeleteConfirmPopup,
+      toggleIsLiked,
+      loadImageInPopup,
+      setLikeCount
+    );
+  });
 }
 
 // ======================================================================
@@ -213,14 +203,13 @@ async function updateProfileFromForm() {
   const profileDescriptionForm = document.querySelector(
     config.selectors.profileDescriptionForm
   );
-  await postProfileData(profileNameForm.value, profileDescriptionForm.value)
-    .then((data) => {
-      profileName.textContent = data.name;
-      profileDescription.textContent = data.about;
-    })
-    .catch((err) => {
-      console.error(err);
-    });
+  await postProfileData(
+    profileNameForm.value,
+    profileDescriptionForm.value
+  ).then((data) => {
+    profileName.textContent = data.name;
+    profileDescription.textContent = data.about;
+  });
 }
 
 // ======================================================================
@@ -240,53 +229,58 @@ async function renderCards(
   loadHandler,
   setLikeCount
 ) {
-  while (cardsContainer.firstChild) {
-    cardsContainer.removeChild(cardsContainer.firstChild);
-  }
-  const profileData = await getProfileData().catch((err) => {
-    console.error(err);
-  });
-  const cards = await getCards()
-    .then((result) => {
-      return Promise.all(
-        result.map(async (card) => {
-          return {
-            name: card.name,
-            link: card.link,
-            likes: card.likes,
-            ownerId: card.owner._id,
-            id: card._id,
-          };
-        })
+  try {
+    while (cardsContainer.firstChild) {
+      cardsContainer.removeChild(cardsContainer.firstChild);
+    }
+
+    const profileData = await getProfileData();
+    const name = document.querySelector(config.selectors.profileName);
+    const description = document.querySelector(
+      config.selectors.profileDescription
+    );
+    const avatar = document.querySelector(config.selectors.profileImage);
+
+    name.textContent = profileData.name;
+    description.textContent = profileData.about;
+    avatar.style.backgroundImage = `url(${profileData.avatar})`;
+
+    const cards = await getCards();
+
+    cards.forEach((card) => {
+      const cardData = {
+        name: card.name,
+        link: card.link,
+        likes: card.likes,
+        ownerId: card.owner._id,
+        id: card._id,
+      };
+      const renderedCard = createHandler(
+        cardData,
+        likeHandler,
+        delHandler,
+        loadHandler
       );
-    })
-    .catch((err) => {
-      console.error(err);
+      if (cardData.ownerId !== profileData._id) {
+        renderedCard.querySelector(config.selectors.cardDeleteButton).remove();
+      }
+      setLikeCount(
+        renderedCard.querySelector(config.selectors.cardLikeButton),
+        cardData.likes.length
+      );
+      const selfLiked = cardData.likes.some(
+        (like) => like._id === profileData._id
+      );
+      if (selfLiked) {
+        renderedCard
+          .querySelector(config.selectors.cardLikeButton)
+          .classList.add(config.selectors.cardLikeButtonIsActive);
+      }
+      cardsContainer.append(renderedCard);
     });
-  cards.forEach((cardData) => {
-    const renderedCard = createHandler(
-      cardData,
-      likeHandler,
-      delHandler,
-      loadHandler
-    );
-    if (cardData.ownerId !== profileData._id) {
-      renderedCard.querySelector(config.selectors.cardDeleteButton).remove();
-    }
-    setLikeCount(
-      renderedCard.querySelector(config.selectors.cardLikeButton),
-      cardData.likes.length
-    );
-    const selfLiked = cardData.likes.some(
-      (like) => like._id === profileData._id
-    );
-    if (selfLiked) {
-      renderedCard
-        .querySelector(config.selectors.cardLikeButton)
-        .classList.add(config.selectors.cardLikeButtonIsActive);
-    }
-    cardsContainer.append(renderedCard);
-  });
+  } catch (err) {
+    console.error("Ошибка при загрузке карточек или профиля:", err);
+  }
 }
 
 renderCards(
@@ -324,24 +318,5 @@ document.addEventListener("popupOpened", (evt) => {
     }
   }
 });
-
-// ======================================================================
-
-// ======================= Загрузка данных профиля при инициализации =======================
-getProfileData()
-  .then((result) => {
-    const name = document.querySelector(config.selectors.profileName);
-    const description = document.querySelector(
-      config.selectors.profileDescription
-    );
-    const avatar = document.querySelector(config.selectors.profileImage);
-
-    name.textContent = result.name;
-    description.textContent = result.about;
-    avatar.style.backgroundImage = `url(${result.avatar})`;
-  })
-  .catch((err) => {
-    console.error(err);
-  });
 
 // ======================================================================

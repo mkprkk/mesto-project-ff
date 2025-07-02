@@ -6,18 +6,19 @@ const config = {
   },
 };
 
-export const getProfileData = async () => {
+const handleResponse = (res) => {
+  if (!res.ok) {
+    throw new Error(`Ошибка: ${res.status}`);
+  }
+  return res.json();
+};
+
+export const getProfileData = () => {
   return fetch(`${config.baseUrl}/users/me`, {
     headers: {
       authorization: config.headers.authorization,
     },
-  })
-    .then((res) => {
-      if (!res.ok) {
-        throw new Error(`Ошибка: ${res.status}`);
-      }
-      return res.json();
-    })
+  }).then(handleResponse);
 };
 
 export const getCards = async () => {
@@ -25,12 +26,7 @@ export const getCards = async () => {
     headers: {
       authorization: config.headers.authorization,
     },
-  }).then((res) => {
-    if (!res.ok) {
-      throw new Error(`Ошибка: ${res.status}`);
-    }
-    return res.json();
-  });
+  }).then(handleResponse);
 };
 
 export const postProfileData = async (nameValue, descriptionValue) => {
@@ -44,13 +40,7 @@ export const postProfileData = async (nameValue, descriptionValue) => {
       name: nameValue,
       about: descriptionValue,
     }),
-  })
-    .then((res) => {
-      if (!res.ok) {
-        throw new Error(`Ошибка: ${res.status}`);
-      }
-      return res.json();
-    })
+  }).then(handleResponse);
 };
 
 export const postCardData = async (cardData) => {
@@ -61,12 +51,7 @@ export const postCardData = async (cardData) => {
       authorization: config.headers.authorization,
     },
     body: JSON.stringify(cardData),
-  }).then((res) => {
-    if (!res.ok) {
-      throw new Error(`Ошибка: ${res.status}`);
-    }
-    return res.json();
-  });
+  }).then(handleResponse);
 };
 
 export const deleteCardData = async (cardId) => {
@@ -75,12 +60,7 @@ export const deleteCardData = async (cardId) => {
     headers: {
       authorization: config.headers.authorization,
     },
-  }).then((res) => {
-    if (!res.ok) {
-      throw new Error(`Ошибка: ${res.status}`);
-    }
-    return res.json();
-  });
+  }).then(handleResponse);
 };
 
 export const toggleLike = async (cardId, isLiked) => {
@@ -89,13 +69,7 @@ export const toggleLike = async (cardId, isLiked) => {
     headers: {
       authorization: config.headers.authorization,
     },
-  }).then((res) => {
-    if (!res.ok) {
-      throw new Error(`Ошибка: ${res.status}`);
-    }
-    res;
-    return res.json();
-  });
+  }).then(handleResponse);
 };
 
 export const postAvatarData = async (avatarUrl) => {
@@ -108,10 +82,5 @@ export const postAvatarData = async (avatarUrl) => {
     body: JSON.stringify({
       avatar: avatarUrl,
     }),
-  }).then((res) => {
-    if (!res.ok) {
-      throw new Error(`Ошибка: ${res.status}`);
-    }
-    return res.json();
-  });
+  }).then(handleResponse);
 };
